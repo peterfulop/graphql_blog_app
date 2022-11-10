@@ -1992,6 +1992,11 @@ yn@3.1.1:
   resolved "https://registry.yarnpkg.com/yn/-/yn-3.1.1.tgz#1e87401a09d767c1d5eab26a6e4c185182d2eb50"
   integrity sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==
 
+zapatos@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/zapatos/-/zapatos-6.1.1.tgz#04b521f7f0fb5762a4eb4743cec4360c1ee975b0"
+  integrity sha512-BeOq6VX67BEu++JoY2UHnlRs9zyFhQXiBoHOecptbrujproJJ4OIFdiimOt8fXxXJwLEdUmqa2LggF0GWl+a7w==
+
 zen-observable-ts@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-1.2.5.tgz#6c6d9ea3d3a842812c6e9519209365a122ba8b58"

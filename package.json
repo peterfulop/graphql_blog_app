@@ -17,7 +17,8 @@
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
     "pg": "^8.8.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "zapatos": "^6.1.1"
   },
   "scripts": {
     "make:knex": "knex migrate:make --knexfile src/config/knexfile.ts",
@@ -30,7 +31,8 @@
     "build": "rimraf dist && swc ./src -d dist",
     "start": "node dist/index.js",
     "start:backend": "ts-node src/index.ts dotenv_config_path=./.env",
-    "start:docker": "yarn build && node --inspect=0.0.0.0 dist/index.js"
+    "start:docker": "yarn build && node --inspect=0.0.0.0 dist/index.js",
+    "codegen:zapatos": "ts-node src/database/zapatos.ts"
   },
   "devDependencies": {
     "@fastify/cookie": "^8.3.0",

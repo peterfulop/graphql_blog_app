@@ -8,7 +8,7 @@ export type CreatePostInput = {
 };
 
 export const createPostUseCase = async (input: CreatePostInput) => {
-  const { title, content } = input.args.input;
+  const { title, content, published } = input.args.input;
   const { userId } = input.context.user;
   const { prisma } = input.context;
 
@@ -22,16 +22,28 @@ export const createPostUseCase = async (input: CreatePostInput) => {
       post: null,
     };
   }
-  const post = await prisma.post.create({
-    data: {
-      title,
-      content,
-      userId,
-    },
-  });
 
-  return {
-    userErrors: [],
-    post,
-  };
+  try {
+    const post = await prisma.post.create({
+      data: {
+        title,
+        content,
+        userId,
+        published: published || false,
+      },
+    });
+    return {
+      userErrors: [],
+      post,
+    };
+  } catch (error) {
+    return {
+      userErrors: [
+        {
+          message: DBErrorMessages.SERVER_ERROR,
+        },
+      ],
+      post: null,
+    };
+  }
 };

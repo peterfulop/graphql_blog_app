@@ -9,7 +9,7 @@ export type UpdatePostInput = {
 };
 
 export const UpdatePostUseCase = async (input: UpdatePostInput) => {
-  const { title, content, postId } = input.args.input;
+  const { title, content, published, postId } = input.args.input;
   const { prisma } = input.context;
 
   if (!title && !content) {
@@ -27,19 +27,27 @@ export const UpdatePostUseCase = async (input: UpdatePostInput) => {
     };
   }
 
-  const reducedInputs = reduceObjectNulls({ title, content });
-  const post = await prisma.post.update({
-    where: {
-      id: postId,
-    },
-    data: {
-      ...reducedInputs,
-      updatedAt: new Date(Date.now()),
-    },
-  });
+  const reducedInputs = reduceObjectNulls({ title, content, published });
 
-  return {
-    userErrors: [],
-    post,
-  };
+  try {
+    const post = await prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        ...reducedInputs,
+        updatedAt: new Date(Date.now()),
+      },
+    });
+
+    return {
+      userErrors: [],
+      post,
+    };
+  } catch (error) {
+    return {
+      userErrors: [{ message: DBErrorMessages.SERVER_ERROR }],
+      post: null,
+    };
+  }
 };

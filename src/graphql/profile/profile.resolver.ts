@@ -8,11 +8,10 @@ import { getProfileUseCase } from '../../use-case/profile-use-case/get-profile-u
 export const profileGQLResolver = {
   Query: {
     getProfile: async (
-      _source: any,
       args: QueryGetProfileArgs,
       context: ApolloContext
     ): Promise<Profile> => {
-      return getProfileUseCase({ args, context }) as unknown as Profile;
+      return await getProfileUseCase({ args, context });
     },
   },
 };

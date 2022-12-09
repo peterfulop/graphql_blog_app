@@ -16,56 +16,36 @@ import { UpdatePostUseCase } from '../../use-case/post-use-case/update-post.use-
 export const postGQLResolvers = {
   Query: {
     getPost: async (
-      _source: any,
       args: QueryGetPostArgs,
       context: ApolloContext
     ): Promise<Post> => {
-      return (await getPostUseCase({
-        args,
-        context,
-      })) as unknown as Post;
+      return await getPostUseCase({ args, context });
     },
     posts: async (
-      _source: any,
       args: QueryGetPostArgs,
       context: ApolloContext
     ): Promise<Post[]> => {
-      return (await getPostsUseCase({
-        args,
-        context,
-      })) as unknown as Post[];
+      return await getPostsUseCase({ args, context });
     },
   },
   Mutations: {
     postCreate: async (
-      __: any,
       args: MutationPostCreateArgs,
       context: ApolloContext
     ): Promise<PostPayload> => {
-      return (await createPostUseCase({
-        args,
-        context,
-      })) as unknown as PostPayload;
+      return await createPostUseCase({ args, context });
     },
     postUpdate: async (
-      __: any,
       args: MutationPostUpdateArgs,
       context: ApolloContext
     ): Promise<PostPayload> => {
-      return (await UpdatePostUseCase({
-        args,
-        context,
-      })) as unknown as PostPayload;
+      return await UpdatePostUseCase({ args, context });
     },
     postDelete: async (
-      __: any,
       args: MutationPostDeleteArgs,
       context: ApolloContext
     ): Promise<PostPayload> => {
-      return (await DeletePostUseCase({
-        args,
-        context,
-      })) as unknown as PostPayload;
+      return await DeletePostUseCase({ args, context });
     },
   },
 };

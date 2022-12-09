@@ -1,13 +1,18 @@
 import { ApolloContext } from '../../apollo';
 import { DBErrorMessages } from '../../enum/db-error-messages.enum';
-import { MutationPostDeleteArgs } from '../../types/graphql-generated/graphql';
+import {
+  MutationPostDeleteArgs,
+  PostPayload,
+} from '../../types/graphql-generated/graphql';
 
 export type DeletePostInput = {
   args: MutationPostDeleteArgs;
   context: ApolloContext;
 };
 
-export const DeletePostUseCase = async (input: DeletePostInput) => {
+export const DeletePostUseCase = async (
+  input: DeletePostInput
+): Promise<PostPayload> => {
   const { id } = input.args;
   const { prisma } = input.context;
 
@@ -31,5 +36,5 @@ export const DeletePostUseCase = async (input: DeletePostInput) => {
   return {
     userErrors: [],
     post: postToDelete,
-  };
+  } as unknown as PostPayload;
 };

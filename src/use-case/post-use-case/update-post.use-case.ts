@@ -1,6 +1,9 @@
 import { ApolloContext } from '../../apollo';
 import { DBErrorMessages } from '../../enum/db-error-messages.enum';
-import { MutationPostUpdateArgs } from '../../types/graphql-generated/graphql';
+import {
+  MutationPostUpdateArgs,
+  PostPayload,
+} from '../../types/graphql-generated/graphql';
 import { reduceObjectNulls } from '../../utils/reduce-object';
 
 export type UpdatePostInput = {
@@ -8,7 +11,9 @@ export type UpdatePostInput = {
   context: ApolloContext;
 };
 
-export const UpdatePostUseCase = async (input: UpdatePostInput) => {
+export const UpdatePostUseCase = async (
+  input: UpdatePostInput
+): Promise<PostPayload> => {
   const { title, content, published, postId } = input.args.input;
   const { prisma } = input.context;
 
@@ -39,11 +44,10 @@ export const UpdatePostUseCase = async (input: UpdatePostInput) => {
         updatedAt: new Date(Date.now()),
       },
     });
-
     return {
       userErrors: [],
       post,
-    };
+    } as unknown as PostPayload;
   } catch (error) {
     return {
       userErrors: [{ message: DBErrorMessages.SERVER_ERROR }],

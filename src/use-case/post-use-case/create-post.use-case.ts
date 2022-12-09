@@ -1,13 +1,18 @@
 import { ApolloContext } from '../../apollo';
 import { DBErrorMessages } from '../../enum/db-error-messages.enum';
-import { MutationPostCreateArgs } from '../../types/graphql-generated/graphql';
+import {
+  MutationPostCreateArgs,
+  PostPayload,
+} from '../../types/graphql-generated/graphql';
 
 export type CreatePostInput = {
   args: MutationPostCreateArgs;
   context: ApolloContext;
 };
 
-export const createPostUseCase = async (input: CreatePostInput) => {
+export const createPostUseCase = async (
+  input: CreatePostInput
+): Promise<PostPayload> => {
   const { title, content, published } = input.args.input;
   const { userId } = input.context.user;
   const { prisma } = input.context;
@@ -35,7 +40,7 @@ export const createPostUseCase = async (input: CreatePostInput) => {
     return {
       userErrors: [],
       post,
-    };
+    } as unknown as PostPayload;
   } catch (error) {
     return {
       userErrors: [

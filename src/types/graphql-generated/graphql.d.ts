@@ -18,11 +18,17 @@ export type Mutation = {
   __typename?: 'Mutation';
   _: Maybe<Scalars['Boolean']>;
   postCreate: PostPayload;
+  postUpdate: PostPayload;
 };
 
 
 export type MutationPostCreateArgs = {
   input: PostCreateInput;
+};
+
+
+export type MutationPostUpdateArgs = {
+  input: PostUpdateInput;
 };
 
 export type Post = {
@@ -32,6 +38,7 @@ export type Post = {
   id: Scalars['ID'];
   publisched: Scalars['Boolean'];
   title: Scalars['String'];
+  updatedAt: Scalars['String'];
   user: User;
 };
 
@@ -44,6 +51,12 @@ export type PostPayload = {
   __typename?: 'PostPayload';
   post: Maybe<Post>;
   userErrors: Array<UserError>;
+};
+
+export type PostUpdateInput = {
+  content: InputMaybe<Scalars['String']>;
+  postId: Scalars['ID'];
+  title: InputMaybe<Scalars['String']>;
 };
 
 export type Profile = {
@@ -59,6 +72,7 @@ export type Query = {
   getPost: Maybe<Post>;
   getProfile: Maybe<Profile>;
   getUser: Maybe<User>;
+  posts: Array<Post>;
 };
 
 
@@ -170,6 +184,7 @@ export type ResolversTypes = {
   Post: ResolverTypeWrapper<Post>;
   PostCreateInput: PostCreateInput;
   PostPayload: ResolverTypeWrapper<PostPayload>;
+  PostUpdateInput: PostUpdateInput;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -186,6 +201,7 @@ export type ResolversParentTypes = {
   Post: Post;
   PostCreateInput: PostCreateInput;
   PostPayload: PostPayload;
+  PostUpdateInput: PostUpdateInput;
   Profile: Profile;
   Query: {};
   String: Scalars['String'];
@@ -197,6 +213,7 @@ export type ResolversParentTypes = {
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   postCreate: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
+  postUpdate: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostUpdateArgs, 'input'>>;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
@@ -205,6 +222,7 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   publisched: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   title: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   user: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -227,6 +245,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getPost: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostArgs, 'id'>>;
   getProfile: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, RequireFields<QueryGetProfileArgs, 'id'>>;
   getUser: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
+  posts: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {

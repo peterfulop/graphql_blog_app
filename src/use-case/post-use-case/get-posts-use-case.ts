@@ -1,17 +1,18 @@
 import { ApolloContext } from '../../apollo';
 import { QueryGetPostArgs } from '../../types/graphql-generated/graphql';
 
-export type GetPostInput = {
+export type GetPostsInput = {
   args: QueryGetPostArgs;
   context: ApolloContext;
 };
 
-export const getPostUseCase = async (input: GetPostInput) => {
+export const getPostsUseCase = async (input: GetPostsInput) => {
   const { prisma } = input.context;
-  const { id } = input.args;
-  return await prisma.post.findUnique({
-    where: {
-      id,
-    },
+  return await prisma.post.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
   });
 };

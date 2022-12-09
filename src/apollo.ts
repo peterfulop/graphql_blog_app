@@ -1,44 +1,32 @@
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { ApolloServer } from 'apollo-server-express';
-import { GraphQLSchema } from 'graphql';
-import { typeDefs } from './graphql';
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
+import type Prisma from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+import { resolvers, typeDefs } from './graphql';
 
-export interface ApolloInstance {
-  server: ApolloServer;
-  schema: GraphQLSchema;
+const prisma = new PrismaClient();
+
+export interface ApolloContext {
+  prisma: Prisma.PrismaClient<
+    Prisma.Prisma.PrismaClientOptions,
+    never,
+    | Prisma.Prisma.RejectOnNotFound
+    | Prisma.Prisma.RejectPerOperation
+    | undefined
+  >;
 }
 
-export type UserToken = {
-  name: string;
-  email: string;
-};
+export const createApolloServer = async () => {
+  const server = new ApolloServer<ApolloContext>({
+    typeDefs,
+    resolvers,
+  });
 
-export type ApolloContext = {
-  user: UserToken | null;
-};
-
-const schema = makeExecutableSchema({
-  typeDefs: [...typeDefs],
-  resolvers: [],
-});
-
-export const createApolloServer = (): ApolloInstance => {
-  return {
-    server: new ApolloServer({
-      context: async (): Promise<ApolloContext> => {
-        const user = {
-          name: 'test-user',
-          email: 'test-user@email.com',
-        };
-        return {
-          user,
-        };
-      },
-      schema,
-      dataSources: () => {
-        return {};
-      },
+  const { url } = await startStandaloneServer(server, {
+    context: async () => ({
+      prisma,
     }),
-    schema,
-  };
+  });
+
+  return { url };
 };

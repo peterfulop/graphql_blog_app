@@ -7,17 +7,20 @@ export const postTypeDefs = `#graphql
   extend type Mutation {
     postCreate(input: PostCreateInput!): PostPayload!
     postUpdate(input: PostUpdateInput!): PostPayload!
+    postDelete(id: ID!): PostPayload!
   }
 
   input PostCreateInput {
     title: String!
     content: String!
+    published: Boolean
   }
 
   input PostUpdateInput {
     postId: ID!
     title: String
     content: String
+    published: Boolean
   }
 
   type Post {
@@ -26,7 +29,7 @@ export const postTypeDefs = `#graphql
     content: String!
     createdAt: String!
     updatedAt: String!
-    publisched: Boolean!
+    published: Boolean!
     user: User!
   }
 
@@ -34,4 +37,5 @@ export const postTypeDefs = `#graphql
     userErrors: [UserError!]!
     post: Post
   }
+
 `;

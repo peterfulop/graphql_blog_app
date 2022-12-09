@@ -1,15 +1,13 @@
-import { gql } from 'apollo-server-express';
-
-export const userTypeDefs = gql`
+export const userTypeDefs = `#graphql
   extend type Query {
     getUser(id: ID!): User
   }
 
   type User {
     id: ID!
-    email: String!
     name: String!
-    password: String!
-    date: String
+    email: String!
+    profile: Profile
+    posts: [Post!]!
   }
 `;

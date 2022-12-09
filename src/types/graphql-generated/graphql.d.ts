@@ -18,12 +18,18 @@ export type Mutation = {
   __typename?: 'Mutation';
   _: Maybe<Scalars['Boolean']>;
   postCreate: PostPayload;
+  postDelete: PostPayload;
   postUpdate: PostPayload;
 };
 
 
 export type MutationPostCreateArgs = {
   input: PostCreateInput;
+};
+
+
+export type MutationPostDeleteArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -36,7 +42,7 @@ export type Post = {
   content: Scalars['String'];
   createdAt: Scalars['String'];
   id: Scalars['ID'];
-  publisched: Scalars['Boolean'];
+  published: Scalars['Boolean'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
   user: User;
@@ -44,6 +50,7 @@ export type Post = {
 
 export type PostCreateInput = {
   content: Scalars['String'];
+  published: InputMaybe<Scalars['Boolean']>;
   title: Scalars['String'];
 };
 
@@ -56,6 +63,7 @@ export type PostPayload = {
 export type PostUpdateInput = {
   content: InputMaybe<Scalars['String']>;
   postId: Scalars['ID'];
+  published: InputMaybe<Scalars['Boolean']>;
   title: InputMaybe<Scalars['String']>;
 };
 
@@ -213,6 +221,7 @@ export type ResolversParentTypes = {
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   postCreate: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
+  postDelete: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostDeleteArgs, 'id'>>;
   postUpdate: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostUpdateArgs, 'input'>>;
 };
 
@@ -220,7 +229,7 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   content: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  publisched: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  published: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   title: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   user: Resolver<ResolversTypes['User'], ParentType, ContextType>;

@@ -1,4 +1,5 @@
 import { ApolloContext } from '../../apollo';
+import { DBErrorMessages } from '../../enum/db-error-messages.enum';
 import { MutationPostCreateArgs } from '../../types/graphql-generated/graphql';
 
 export type CreatePostInput = {
@@ -8,21 +9,24 @@ export type CreatePostInput = {
 
 export const createPostUseCase = async (input: CreatePostInput) => {
   const { title, content } = input.args.input;
+  const { userId } = input.context.user;
+  const { prisma } = input.context;
+
   if (!title || !content) {
     return {
       userErrors: [
         {
-          message: 'You must provide a title and a content to create a post!',
+          message: DBErrorMessages.MISSING_TITLE_AND_CONTENT,
         },
       ],
       post: null,
     };
   }
-  const post = await input.context.prisma.post.create({
+  const post = await prisma.post.create({
     data: {
       title,
       content,
-      userId: 'a9c7545e-99ee-4b36-9f75-027a908cdf3e',
+      userId,
     },
   });
 

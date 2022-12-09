@@ -9,12 +9,6 @@ const configObject = convict({
     default: 5000,
     env: 'BACKEND_PORT',
   },
-  databaseUrl: {
-    doc: 'postgres database connection string',
-    format: String,
-    default: 'postgres://user:password@localhost:5444/blog_app',
-    env: 'DATABASE_URL',
-  },
 });
 
 export const config = configObject.getProperties();

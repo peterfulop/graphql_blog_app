@@ -1,3 +1,5 @@
+import { authGQLResolver } from './auth/auth.resolver';
+import { authTypeDefs } from './auth/auth.schema';
 import { postGQLResolvers } from './post/post.resolver';
 import { postTypeDefs } from './post/post.schema';
 import { profileGQLResolver } from './profile/profile.resolver';
@@ -28,11 +30,13 @@ export const typeDefs = [
   postTypeDefs,
   userTypeDefs,
   profileTypeDefs,
+  authTypeDefs,
 ];
 
 const { Query: postQueries, Mutations: postMutations } = postGQLResolvers;
 const { Query: profileQueries } = profileGQLResolver;
-const { Query: userQueries, Mutation: userMutations } = userGQLResolver;
+const { Query: userQueries } = userGQLResolver;
+const { Mutation: authMutations } = authGQLResolver;
 
 export const resolvers = {
   Query: {
@@ -42,6 +46,6 @@ export const resolvers = {
   },
   Mutation: {
     ...postMutations,
-    ...userMutations,
+    ...authMutations,
   },
 };

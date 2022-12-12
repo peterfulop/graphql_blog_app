@@ -16,12 +16,14 @@ import { UpdatePostUseCase } from '../../use-case/post-use-case/update-post.use-
 export const postGQLResolvers = {
   Query: {
     getPost: async (
+      _source: any,
       args: QueryGetPostArgs,
       context: ApolloContext
     ): Promise<Post> => {
       return await getPostUseCase({ args, context });
     },
     posts: async (
+      _source: any,
       args: QueryGetPostArgs,
       context: ApolloContext
     ): Promise<Post[]> => {
@@ -30,18 +32,21 @@ export const postGQLResolvers = {
   },
   Mutations: {
     postCreate: async (
+      _source: any,
       args: MutationPostCreateArgs,
       context: ApolloContext
     ): Promise<PostPayload> => {
       return await createPostUseCase({ args, context });
     },
     postUpdate: async (
+      _source: any,
       args: MutationPostUpdateArgs,
       context: ApolloContext
     ): Promise<PostPayload> => {
       return await UpdatePostUseCase({ args, context });
     },
     postDelete: async (
+      _source: any,
       args: MutationPostDeleteArgs,
       context: ApolloContext
     ): Promise<PostPayload> => {

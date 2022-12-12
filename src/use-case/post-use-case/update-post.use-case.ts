@@ -17,18 +17,23 @@ export const UpdatePostUseCase = async (
   const { title, content, published, postId } = input.args.input;
   const { prisma } = input.context;
 
+  const postPayload: PostPayload = {
+    userErrors: [],
+    post: null,
+  };
+
   if (!title && !content) {
     return {
+      ...postPayload,
       userErrors: [{ message: DBErrorMessages.ONE_FIELD_TO_UPDATE }],
-      post: null,
     };
   }
 
   const postToUpdate = await prisma.post.findUnique({ where: { id: postId } });
   if (!postToUpdate) {
     return {
+      ...postPayload,
       userErrors: [{ message: DBErrorMessages.MISSING_POST }],
-      post: null,
     };
   }
 
@@ -45,9 +50,9 @@ export const UpdatePostUseCase = async (
       },
     });
     return {
-      userErrors: [],
-      post,
-    } as unknown as PostPayload;
+      ...postPayload,
+      ...post,
+    };
   } catch (error) {
     return {
       userErrors: [{ message: DBErrorMessages.SERVER_ERROR }],

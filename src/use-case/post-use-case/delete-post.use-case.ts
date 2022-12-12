@@ -16,11 +16,16 @@ export const DeletePostUseCase = async (
   const { id } = input.args;
   const { prisma } = input.context;
 
+  const postPayload: PostPayload = {
+    userErrors: [],
+    post: null,
+  };
+
   const postToDelete = await prisma.post.findUnique({ where: { id } });
   if (!postToDelete) {
     return {
+      ...postPayload,
       userErrors: [{ message: DBErrorMessages.MISSING_POST }],
-      post: null,
     };
   }
 
@@ -28,13 +33,12 @@ export const DeletePostUseCase = async (
     await prisma.post.delete({ where: { id } });
   } catch (error) {
     return {
+      ...postPayload,
       userErrors: [{ message: DBErrorMessages.SERVER_ERROR }],
-      post: null,
     };
   }
-
   return {
-    userErrors: [],
-    post: postToDelete,
-  } as unknown as PostPayload;
+    ...postPayload,
+    ...postToDelete,
+  };
 };

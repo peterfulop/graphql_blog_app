@@ -17,14 +17,15 @@ export const createPostUseCase = async (
   const { userId } = input.context.user;
   const { prisma } = input.context;
 
+  const postPayload: PostPayload = {
+    userErrors: [],
+    post: null,
+  };
+
   if (!title || !content) {
     return {
-      userErrors: [
-        {
-          message: DBErrorMessages.MISSING_TITLE_AND_CONTENT,
-        },
-      ],
-      post: null,
+      ...postPayload,
+      userErrors: [{ message: DBErrorMessages.MISSING_TITLE_AND_CONTENT }],
     };
   }
 
@@ -38,17 +39,13 @@ export const createPostUseCase = async (
       },
     });
     return {
-      userErrors: [],
-      post,
-    } as unknown as PostPayload;
+      ...postPayload,
+      ...post,
+    };
   } catch (error) {
     return {
-      userErrors: [
-        {
-          message: DBErrorMessages.SERVER_ERROR,
-        },
-      ],
-      post: null,
+      ...postPayload,
+      userErrors: [{ message: DBErrorMessages.SERVER_ERROR }],
     };
   }
 };

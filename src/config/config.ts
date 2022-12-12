@@ -9,6 +9,12 @@ const configObject = convict({
     default: 5000,
     env: 'BACKEND_PORT',
   },
+  bcryptSalt: {
+    doc: 'salt string to hash data',
+    format: String,
+    default: '',
+    env: 'SALT',
+  },
 });
 
 export const config = configObject.getProperties();

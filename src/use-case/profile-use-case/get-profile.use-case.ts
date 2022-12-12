@@ -13,7 +13,9 @@ export const getProfileUseCase = async (
   input: GetProfileInput
 ): Promise<Profile> => {
   const { id } = input.args;
-  return (await input.context.prisma.profile.findUnique({
+  const { prisma } = input.context;
+
+  return (await prisma.profile.findUnique({
     where: {
       id,
     },

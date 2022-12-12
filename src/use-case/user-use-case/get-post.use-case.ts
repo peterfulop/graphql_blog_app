@@ -8,7 +8,9 @@ export type GetUserInput = {
 
 export const getUserUseCase = async (input: GetUserInput): Promise<User> => {
   const { id } = input.args;
-  return (await input.context.prisma.user.findUnique({
+  const { prisma } = input.context;
+
+  return (await prisma.user.findUnique({
     where: {
       id,
     },

@@ -14,7 +14,7 @@ export type SignupInput = {
   context: ApolloContext;
 };
 
-export const SignupUseCase = async (
+export const signupUseCase = async (
   input: SignupInput
 ): Promise<AuthPayload> => {
   const { name, credentials, passwordConfirm, bio } = input.args.input;
@@ -26,14 +26,14 @@ export const SignupUseCase = async (
     userErrors: [],
   };
 
-  if (!name || !name || !password || !bio) {
+  if (!name || !email || !password || !bio) {
     return {
       ...authPayload,
       userErrors: [{ message: DBErrorMessages.MISSING_SIGNUP_DATA }],
     };
   }
 
-  if (credentials.password.length < 6) {
+  if (password.length < 6) {
     return {
       ...authPayload,
       userErrors: [{ message: DBErrorMessages.SHORT_PASSWORD }],
@@ -58,7 +58,6 @@ export const SignupUseCase = async (
       email,
     },
   });
-
   if (isEmailInUse) {
     return {
       ...authPayload,
@@ -77,7 +76,6 @@ export const SignupUseCase = async (
         password: hashedPassword,
       },
     });
-
     await prisma.profile.create({
       data: {
         bio,

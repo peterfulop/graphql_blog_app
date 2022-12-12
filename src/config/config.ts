@@ -15,6 +15,20 @@ const configObject = convict({
     default: '',
     env: 'SALT',
   },
+  cookie: {
+    sessiontokenKey: {
+      doc: 'token key',
+      format: String,
+      default: '',
+      env: 'TOKEN_KEY',
+    },
+    sessiontokenExp: {
+      doc: 'token key',
+      format: String,
+      default: '1d',
+      env: 'TOKEN_EXP',
+    },
+  },
 });
 
 export const config = configObject.getProperties();

@@ -32,7 +32,7 @@ export const typeDefs = [
 
 const { Query: postQueries, Mutations: postMutations } = postGQLResolvers;
 const { Query: profileQueries } = profileGQLResolver;
-const { Query: userQueries } = userGQLResolver;
+const { Query: userQueries, Mutation: userMutations } = userGQLResolver;
 
 export const resolvers = {
   Query: {
@@ -42,5 +42,6 @@ export const resolvers = {
   },
   Mutation: {
     ...postMutations,
+    ...userMutations,
   },
 };

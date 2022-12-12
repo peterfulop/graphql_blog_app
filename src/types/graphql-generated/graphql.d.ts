@@ -14,13 +14,25 @@ export type Scalars = {
   Float: number;
 };
 
+export type AuthPayload = {
+  __typename?: 'AuthPayload';
+  token: Maybe<Scalars['String']>;
+  userErrors: Array<UserError>;
+};
+
+export type CredentialsInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   _: Maybe<Scalars['Boolean']>;
   postCreate: PostPayload;
   postDelete: PostPayload;
   postUpdate: PostPayload;
-  signup: UserPayload;
+  signin: AuthPayload;
+  signup: AuthPayload;
 };
 
 
@@ -36,6 +48,11 @@ export type MutationPostDeleteArgs = {
 
 export type MutationPostUpdateArgs = {
   input: PostUpdateInput;
+};
+
+
+export type MutationSigninArgs = {
+  input: CredentialsInput;
 };
 
 
@@ -106,9 +123,8 @@ export type QueryGetUserArgs = {
 
 export type SignupInput = {
   bio: Scalars['String'];
-  email: Scalars['String'];
+  credentials: CredentialsInput;
   name: Scalars['String'];
-  password: Scalars['String'];
   passwordConfirm: Scalars['String'];
 };
 
@@ -129,12 +145,6 @@ export type User = {
 export type UserError = {
   __typename?: 'UserError';
   message: Scalars['String'];
-};
-
-export type UserPayload = {
-  __typename?: 'UserPayload';
-  user: Maybe<User>;
-  userErrors: Array<UserError>;
 };
 
 
@@ -206,7 +216,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AuthPayload: ResolverTypeWrapper<AuthPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CredentialsInput: CredentialsInput;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Post: ResolverTypeWrapper<Post>;
@@ -220,12 +232,13 @@ export type ResolversTypes = {
   Subscription: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
   UserError: ResolverTypeWrapper<UserError>;
-  UserPayload: ResolverTypeWrapper<UserPayload>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AuthPayload: AuthPayload;
   Boolean: Scalars['Boolean'];
+  CredentialsInput: CredentialsInput;
   ID: Scalars['ID'];
   Mutation: {};
   Post: Post;
@@ -239,7 +252,12 @@ export type ResolversParentTypes = {
   Subscription: {};
   User: User;
   UserError: UserError;
-  UserPayload: UserPayload;
+};
+
+export type AuthPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = {
+  token: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userErrors: Resolver<Array<ResolversTypes['UserError']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -247,7 +265,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   postCreate: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
   postDelete: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostDeleteArgs, 'id'>>;
   postUpdate: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostUpdateArgs, 'input'>>;
-  signup: Resolver<ResolversTypes['UserPayload'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;
+  signin: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSigninArgs, 'input'>>;
+  signup: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
@@ -300,13 +319,8 @@ export type UserErrorResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserPayload'] = ResolversParentTypes['UserPayload']> = {
-  user: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  userErrors: Resolver<Array<ResolversTypes['UserError']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type Resolvers<ContextType = any> = {
+  AuthPayload: AuthPayloadResolvers<ContextType>;
   Mutation: MutationResolvers<ContextType>;
   Post: PostResolvers<ContextType>;
   PostPayload: PostPayloadResolvers<ContextType>;
@@ -315,6 +329,5 @@ export type Resolvers<ContextType = any> = {
   Subscription: SubscriptionResolvers<ContextType>;
   User: UserResolvers<ContextType>;
   UserError: UserErrorResolvers<ContextType>;
-  UserPayload: UserPayloadResolvers<ContextType>;
 };
 

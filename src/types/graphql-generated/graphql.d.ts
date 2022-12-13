@@ -74,6 +74,7 @@ export type Post = {
   published: Scalars['Boolean'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
+  user: User;
   userId: Scalars['String'];
 };
 
@@ -106,6 +107,7 @@ export type Profile = {
   bio: Scalars['String'];
   id: Scalars['ID'];
   user: User;
+  userId: Scalars['String'];
 };
 
 export type Query = {
@@ -124,7 +126,7 @@ export type QueryGetPostArgs = {
 
 
 export type QueryGetProfileArgs = {
-  id: Scalars['ID'];
+  userId: Scalars['ID'];
 };
 
 
@@ -150,7 +152,6 @@ export type User = {
   id: Scalars['ID'];
   name: Scalars['String'];
   posts: Array<Post>;
-  profile: Maybe<Profile>;
 };
 
 export type UserError = {
@@ -290,6 +291,7 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   published: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   title: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   userId: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -304,13 +306,14 @@ export type ProfileResolvers<ContextType = any, ParentType extends ResolversPare
   bio: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   user: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  userId: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   getPost: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostArgs, 'id'>>;
-  getProfile: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, RequireFields<QueryGetProfileArgs, 'id'>>;
+  getProfile: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, RequireFields<QueryGetProfileArgs, 'userId'>>;
   getUser: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
   posts: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType>;
 };
@@ -324,7 +327,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   posts: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType>;
-  profile: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

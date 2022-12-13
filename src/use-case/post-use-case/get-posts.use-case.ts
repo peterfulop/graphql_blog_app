@@ -11,6 +11,9 @@ export const getPostsUseCase = async (
 ): Promise<Post[]> => {
   const { prisma } = input.context;
   return (await prisma.post.findMany({
+    where: {
+      published: true,
+    },
     orderBy: [
       {
         createdAt: 'desc',

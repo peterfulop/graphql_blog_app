@@ -10,14 +10,14 @@ import { signupUseCase } from '../../use-case/auth-use-case/signup.use-case';
 export const authGQLResolver = {
   Mutation: {
     signup: async (
-      _source: any,
+      _parent: any,
       args: MutationSignupArgs,
       context: ApolloContext
     ): Promise<AuthPayload> => {
       return await signupUseCase({ args, context });
     },
     signin: async (
-      _source: any,
+      _parent: any,
       args: MutationSigninArgs,
       context: ApolloContext
     ): Promise<AuthPayload> => {

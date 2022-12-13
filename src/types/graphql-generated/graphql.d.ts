@@ -68,7 +68,7 @@ export type Post = {
   published: Scalars['Boolean'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
-  user: User;
+  userId: Scalars['String'];
 };
 
 export type PostCreateInput = {
@@ -276,7 +276,7 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   published: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   title: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  user: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  userId: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

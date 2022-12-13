@@ -30,12 +30,11 @@ export const postTypeDefs = `#graphql
     createdAt: String!
     updatedAt: String!
     published: Boolean!
-    user: User!
+    userId: String!
   }
 
   type PostPayload {
     userErrors: [UserError!]!
     post: Post
   }
-
 `;

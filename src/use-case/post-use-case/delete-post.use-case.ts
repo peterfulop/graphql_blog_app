@@ -15,7 +15,7 @@ export const DeletePostUseCase = async (
   input: DeletePostInput
 ): Promise<PostPayload> => {
   const { id } = input.args;
-  const { prisma } = input.context;
+  const { prisma, user } = input.context;
 
   const postPayload: PostPayload = {
     userErrors: [],
@@ -31,7 +31,8 @@ export const DeletePostUseCase = async (
   }
 
   const validate = await canUserMutatePostService({
-    context: input.context,
+    prisma,
+    userId: user?.userId,
     postId: postToDelete.id,
   });
 

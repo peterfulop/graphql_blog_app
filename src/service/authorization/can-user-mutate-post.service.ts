@@ -3,8 +3,9 @@ import { DBErrorMessages } from '../../enum/db-error-messages.enum';
 import { UserError } from '../../types/graphql-generated/graphql';
 
 export type CanUserMutatePostServiceInput = {
-  context: ApolloContext;
+  userId?: string;
   postId: string;
+  prisma: ApolloContext['prisma'];
 };
 
 export type AuthPayload = {
@@ -15,9 +16,8 @@ export type AuthPayload = {
 export const canUserMutatePostService = async (
   input: CanUserMutatePostServiceInput
 ): Promise<AuthPayload> => {
-  const { postId } = input;
-  const { prisma } = input.context;
-  const userId = input.context.user?.userId;
+  const { userId, postId } = input;
+  const { prisma } = input;
 
   const authPayload: AuthPayload = {
     access: false,
@@ -27,7 +27,7 @@ export const canUserMutatePostService = async (
   if (!userId) {
     return {
       ...authPayload,
-      userErrors: [{ message: DBErrorMessages.USER_UNAUTHORIZED }],
+      userErrors: [{ message: DBErrorMessages.AUTHORIZATION_FAILED }],
     };
   }
 

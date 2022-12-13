@@ -16,7 +16,7 @@ export const UpdatePostUseCase = async (
   input: UpdatePostInput
 ): Promise<PostPayload> => {
   const { title, content, published, postId } = input.args.input;
-  const { prisma } = input.context;
+  const { prisma, user } = input.context;
 
   const postPayload: PostPayload = {
     userErrors: [],
@@ -39,7 +39,8 @@ export const UpdatePostUseCase = async (
   }
 
   const validate = await canUserMutatePostService({
-    context: input.context,
+    prisma,
+    userId: user?.userId,
     postId: postToUpdate.id,
   });
 

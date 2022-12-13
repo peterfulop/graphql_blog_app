@@ -10,3 +10,13 @@ export const JWTSign = (input: { userId: string; email: string }) => {
     }
   );
 };
+
+export const JWTVerify = (token: string) => {
+  try {
+    return JWT.verify(token, config.cookie.sessiontokenKey) as {
+      userId: string;
+    };
+  } catch (error) {
+    return null;
+  }
+};

@@ -6,7 +6,7 @@ import {
   AuthPayload,
   MutationSigninArgs,
 } from '../../types/graphql-generated/graphql';
-import { JWTSign } from '../../utils/jwt-sign';
+import { JWTSign } from '../../utils/jwt';
 
 export type SignupInput = {
   args: MutationSigninArgs;

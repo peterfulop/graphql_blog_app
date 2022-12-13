@@ -3,6 +3,7 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import type Prisma from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
 import { resolvers, typeDefs } from './graphql';
+import { JWTVerify } from './utils/jwt';
 
 const prisma = new PrismaClient();
 
@@ -14,9 +15,7 @@ export interface ApolloContext {
     | Prisma.Prisma.RejectPerOperation
     | undefined
   >;
-  user: {
-    userId: string;
-  };
+  user: { userId: string } | null;
 }
 
 export const createApolloServer = async () => {
@@ -26,12 +25,14 @@ export const createApolloServer = async () => {
   });
 
   const { url } = await startStandaloneServer(server, {
-    context: async () => ({
-      prisma,
-      user: {
-        userId: 'a9c7545e-99ee-4b36-9f75-027a908cdf3e',
-      },
-    }),
+    context: async ({ req }) => {
+      const token = req.headers.authorization || '';
+      const user = JWTVerify(token);
+      return {
+        prisma,
+        user,
+      };
+    },
   });
 
   return { url };

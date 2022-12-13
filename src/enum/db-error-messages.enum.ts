@@ -10,4 +10,6 @@ export enum DBErrorMessages {
   INVALID_EMAIL_ADDRESS = 'Your email address is invalid!',
   EMAIL_ADDRESS_ALREADY_IN_USE = 'The email address is already in use! Please, choose another one!',
   AUTHORIZATION_FAILED = 'Wrong login credentials!',
+  UNAUTHENTICATED = 'You are not logged in!',
+  USER_UNAUTHORIZED = 'You have no permission to edit this content!',
 }

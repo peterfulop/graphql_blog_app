@@ -30,6 +30,7 @@ export type Mutation = {
   _: Maybe<Scalars['Boolean']>;
   postCreate: PostPayload;
   postDelete: PostPayload;
+  postPublish: PostPayload;
   postUpdate: PostPayload;
   signin: AuthPayload;
   signup: AuthPayload;
@@ -43,6 +44,11 @@ export type MutationPostCreateArgs = {
 
 export type MutationPostDeleteArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationPostPublishArgs = {
+  input: PostPublishInput;
 };
 
 
@@ -81,6 +87,11 @@ export type PostPayload = {
   __typename?: 'PostPayload';
   post: Maybe<Post>;
   userErrors: Array<UserError>;
+};
+
+export type PostPublishInput = {
+  postId: Scalars['ID'];
+  published: InputMaybe<Scalars['Boolean']>;
 };
 
 export type PostUpdateInput = {
@@ -224,6 +235,7 @@ export type ResolversTypes = {
   Post: ResolverTypeWrapper<Post>;
   PostCreateInput: PostCreateInput;
   PostPayload: ResolverTypeWrapper<PostPayload>;
+  PostPublishInput: PostPublishInput;
   PostUpdateInput: PostUpdateInput;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
@@ -244,6 +256,7 @@ export type ResolversParentTypes = {
   Post: Post;
   PostCreateInput: PostCreateInput;
   PostPayload: PostPayload;
+  PostPublishInput: PostPublishInput;
   PostUpdateInput: PostUpdateInput;
   Profile: Profile;
   Query: {};
@@ -264,6 +277,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   _: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   postCreate: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
   postDelete: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostDeleteArgs, 'id'>>;
+  postPublish: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostPublishArgs, 'input'>>;
   postUpdate: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostUpdateArgs, 'input'>>;
   signin: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSigninArgs, 'input'>>;
   signup: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;

@@ -9,6 +9,26 @@ const configObject = convict({
     default: 5000,
     env: 'BACKEND_PORT',
   },
+  bcryptSalt: {
+    doc: 'salt string to hash data',
+    format: String,
+    default: '',
+    env: 'SALT',
+  },
+  cookie: {
+    sessiontokenKey: {
+      doc: 'token key',
+      format: String,
+      default: '',
+      env: 'TOKEN_KEY',
+    },
+    sessiontokenExp: {
+      doc: 'token key',
+      format: String,
+      default: '1d',
+      env: 'TOKEN_EXP',
+    },
+  },
 });
 
 export const config = configObject.getProperties();

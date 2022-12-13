@@ -3,7 +3,7 @@ import {
   Profile,
   QueryGetProfileArgs,
 } from '../../types/graphql-generated/graphql';
-import { getProfileUseCase } from '../../use-case/profile-use-case/get-profile-use-case';
+import { getProfileUseCase } from '../../use-case/profile-use-case/get-profile.use-case';
 
 export const profileGQLResolver = {
   Query: {
@@ -12,7 +12,7 @@ export const profileGQLResolver = {
       args: QueryGetProfileArgs,
       context: ApolloContext
     ): Promise<Profile> => {
-      return getProfileUseCase({ args, context }) as unknown as Profile;
+      return await getProfileUseCase({ args, context });
     },
   },
 };

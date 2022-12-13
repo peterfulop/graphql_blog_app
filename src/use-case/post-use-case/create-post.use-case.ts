@@ -1,25 +1,51 @@
 import { ApolloContext } from '../../apollo';
 import { DBErrorMessages } from '../../enum/db-error-messages.enum';
-import { MutationPostCreateArgs } from '../../types/graphql-generated/graphql';
+import {
+  MutationPostCreateArgs,
+  PostPayload,
+} from '../../types/graphql-generated/graphql';
 
 export type CreatePostInput = {
   args: MutationPostCreateArgs;
   context: ApolloContext;
 };
 
-export const createPostUseCase = async (input: CreatePostInput) => {
+export const createPostUseCase = async (
+  input: CreatePostInput
+): Promise<PostPayload> => {
   const { title, content, published } = input.args.input;
-  const { userId } = input.context.user;
+  const userId = input.context.user?.userId;
   const { prisma } = input.context;
+
+  const postPayload: PostPayload = {
+    userErrors: [],
+    post: null,
+  };
+
+  if (!userId) {
+    return {
+      ...postPayload,
+      userErrors: [{ message: DBErrorMessages.UNAUTHENTICATED }],
+    };
+  }
+
+  const userExists = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!userExists) {
+    return {
+      ...postPayload,
+      userErrors: [{ message: DBErrorMessages.UNAUTHENTICATED }],
+    };
+  }
 
   if (!title || !content) {
     return {
-      userErrors: [
-        {
-          message: DBErrorMessages.MISSING_TITLE_AND_CONTENT,
-        },
-      ],
-      post: null,
+      ...postPayload,
+      userErrors: [{ message: DBErrorMessages.MISSING_TITLE_AND_CONTENT }],
     };
   }
 
@@ -28,22 +54,18 @@ export const createPostUseCase = async (input: CreatePostInput) => {
       data: {
         title,
         content,
-        userId,
+        userId: userId,
         published: published || false,
       },
     });
     return {
-      userErrors: [],
+      ...postPayload,
       post,
-    };
+    } as unknown as PostPayload;
   } catch (error) {
     return {
-      userErrors: [
-        {
-          message: DBErrorMessages.SERVER_ERROR,
-        },
-      ],
-      post: null,
+      ...postPayload,
+      userErrors: [{ message: DBErrorMessages.SERVER_ERROR }],
     };
   }
 };

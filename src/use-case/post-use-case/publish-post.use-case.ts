@@ -2,20 +2,19 @@ import { ApolloContext } from '../../apollo';
 import { DBErrorMessages } from '../../enum/db-error-messages.enum';
 import { canUserMutatePostService } from '../../service/authorization/can-user-mutate-post.service';
 import {
-  MutationPostUpdateArgs,
+  MutationPostPublishArgs,
   PostPayload,
 } from '../../types/graphql-generated/graphql';
-import { reduceObjectNulls } from '../../utils/reduce-object';
 
-export type UpdatePostInput = {
-  args: MutationPostUpdateArgs;
+export type PublishPostInput = {
+  args: MutationPostPublishArgs;
   context: ApolloContext;
 };
 
-export const updatePostUseCase = async (
-  input: UpdatePostInput
+export const publishPostUseCase = async (
+  input: PublishPostInput
 ): Promise<PostPayload> => {
-  const { title, content, published, postId } = input.args.input;
+  const { published, postId } = input.args.input;
   const { prisma, user } = input.context;
 
   const postPayload: PostPayload = {
@@ -23,14 +22,8 @@ export const updatePostUseCase = async (
     post: null,
   };
 
-  if (!title || !content) {
-    return {
-      ...postPayload,
-      userErrors: [{ message: DBErrorMessages.ONE_FIELD_TO_UPDATE }],
-    };
-  }
-
   const postToUpdate = await prisma.post.findUnique({ where: { id: postId } });
+
   if (!postId || !postToUpdate) {
     return {
       ...postPayload,
@@ -51,15 +44,13 @@ export const updatePostUseCase = async (
     };
   }
 
-  const reducedInputs = reduceObjectNulls({ title, content, published });
-
   try {
     const post = await prisma.post.update({
       where: {
         id: postId,
       },
       data: {
-        ...reducedInputs,
+        published: published || false,
         updatedAt: new Date(Date.now()),
       },
     });

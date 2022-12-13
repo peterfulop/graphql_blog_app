@@ -3,7 +3,7 @@ import {
   QueryGetProfileArgs,
   User,
 } from '../../types/graphql-generated/graphql';
-import { getUserUseCase } from '../../use-case/user-use-case/get-post-use-case';
+import { getUserUseCase } from '../../use-case/user-use-case/get-user.use-case';
 
 export const userGQLResolver = {
   Query: {
@@ -12,7 +12,7 @@ export const userGQLResolver = {
       args: QueryGetProfileArgs,
       context: ApolloContext
     ): Promise<User> => {
-      return (await getUserUseCase({ args, context })) as unknown as User;
+      return await getUserUseCase({ args, context });
     },
   },
 };

@@ -1,21 +1,45 @@
 import { ApolloContext } from '../../apollo';
 import { DBErrorMessages } from '../../enum/db-error-messages.enum';
-import { MutationPostDeleteArgs } from '../../types/graphql-generated/graphql';
+import { canUserMutatePostService } from '../../service/authorization/can-user-mutate-post.service';
+import {
+  MutationPostDeleteArgs,
+  PostPayload,
+} from '../../types/graphql-generated/graphql';
 
 export type DeletePostInput = {
   args: MutationPostDeleteArgs;
   context: ApolloContext;
 };
 
-export const DeletePostUseCase = async (input: DeletePostInput) => {
+export const deletePostUseCase = async (
+  input: DeletePostInput
+): Promise<PostPayload> => {
   const { id } = input.args;
-  const { prisma } = input.context;
+  const { prisma, user } = input.context;
+
+  const postPayload: PostPayload = {
+    userErrors: [],
+    post: null,
+  };
 
   const postToDelete = await prisma.post.findUnique({ where: { id } });
   if (!postToDelete) {
     return {
+      ...postPayload,
       userErrors: [{ message: DBErrorMessages.MISSING_POST }],
-      post: null,
+    };
+  }
+
+  const validate = await canUserMutatePostService({
+    prisma,
+    userId: user?.userId,
+    postId: postToDelete.id,
+  });
+
+  if (!validate.access) {
+    return {
+      ...postPayload,
+      userErrors: validate.userErrors,
     };
   }
 
@@ -23,13 +47,12 @@ export const DeletePostUseCase = async (input: DeletePostInput) => {
     await prisma.post.delete({ where: { id } });
   } catch (error) {
     return {
+      ...postPayload,
       userErrors: [{ message: DBErrorMessages.SERVER_ERROR }],
-      post: null,
     };
   }
-
   return {
-    userErrors: [],
+    ...postPayload,
     post: postToDelete,
-  };
+  } as unknown as PostPayload;
 };

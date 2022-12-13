@@ -14,12 +14,26 @@ export type Scalars = {
   Float: number;
 };
 
+export type AuthPayload = {
+  __typename?: 'AuthPayload';
+  token: Maybe<Scalars['String']>;
+  userErrors: Array<UserError>;
+};
+
+export type CredentialsInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   _: Maybe<Scalars['Boolean']>;
   postCreate: PostPayload;
   postDelete: PostPayload;
+  postPublish: PostPayload;
   postUpdate: PostPayload;
+  signin: AuthPayload;
+  signup: AuthPayload;
 };
 
 
@@ -33,8 +47,23 @@ export type MutationPostDeleteArgs = {
 };
 
 
+export type MutationPostPublishArgs = {
+  input: PostPublishInput;
+};
+
+
 export type MutationPostUpdateArgs = {
   input: PostUpdateInput;
+};
+
+
+export type MutationSigninArgs = {
+  input: CredentialsInput;
+};
+
+
+export type MutationSignupArgs = {
+  input: SignupInput;
 };
 
 export type Post = {
@@ -45,7 +74,7 @@ export type Post = {
   published: Scalars['Boolean'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
-  user: User;
+  userId: Scalars['String'];
 };
 
 export type PostCreateInput = {
@@ -58,6 +87,11 @@ export type PostPayload = {
   __typename?: 'PostPayload';
   post: Maybe<Post>;
   userErrors: Array<UserError>;
+};
+
+export type PostPublishInput = {
+  postId: Scalars['ID'];
+  published: InputMaybe<Scalars['Boolean']>;
 };
 
 export type PostUpdateInput = {
@@ -96,6 +130,13 @@ export type QueryGetProfileArgs = {
 
 export type QueryGetUserArgs = {
   id: Scalars['ID'];
+};
+
+export type SignupInput = {
+  bio: Scalars['String'];
+  credentials: CredentialsInput;
+  name: Scalars['String'];
+  passwordConfirm: Scalars['String'];
 };
 
 export type Subscription = {
@@ -186,15 +227,19 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AuthPayload: ResolverTypeWrapper<AuthPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CredentialsInput: CredentialsInput;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Post: ResolverTypeWrapper<Post>;
   PostCreateInput: PostCreateInput;
   PostPayload: ResolverTypeWrapper<PostPayload>;
+  PostPublishInput: PostPublishInput;
   PostUpdateInput: PostUpdateInput;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
+  SignupInput: SignupInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
@@ -203,26 +248,39 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AuthPayload: AuthPayload;
   Boolean: Scalars['Boolean'];
+  CredentialsInput: CredentialsInput;
   ID: Scalars['ID'];
   Mutation: {};
   Post: Post;
   PostCreateInput: PostCreateInput;
   PostPayload: PostPayload;
+  PostPublishInput: PostPublishInput;
   PostUpdateInput: PostUpdateInput;
   Profile: Profile;
   Query: {};
+  SignupInput: SignupInput;
   String: Scalars['String'];
   Subscription: {};
   User: User;
   UserError: UserError;
 };
 
+export type AuthPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = {
+  token: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userErrors: Resolver<Array<ResolversTypes['UserError']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   postCreate: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
   postDelete: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostDeleteArgs, 'id'>>;
+  postPublish: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostPublishArgs, 'input'>>;
   postUpdate: Resolver<ResolversTypes['PostPayload'], ParentType, ContextType, RequireFields<MutationPostUpdateArgs, 'input'>>;
+  signin: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSigninArgs, 'input'>>;
+  signup: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
@@ -232,7 +290,7 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   published: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   title: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  user: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  userId: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -276,6 +334,7 @@ export type UserErrorResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type Resolvers<ContextType = any> = {
+  AuthPayload: AuthPayloadResolvers<ContextType>;
   Mutation: MutationResolvers<ContextType>;
   Post: PostResolvers<ContextType>;
   PostPayload: PostPayloadResolvers<ContextType>;

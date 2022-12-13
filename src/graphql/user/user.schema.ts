@@ -10,4 +10,5 @@ export const userTypeDefs = `#graphql
     profile: Profile
     posts: [Post!]!
   }
+
 `;

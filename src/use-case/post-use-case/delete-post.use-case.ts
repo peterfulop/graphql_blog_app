@@ -1,5 +1,6 @@
 import { ApolloContext } from '../../apollo';
 import { DBErrorMessages } from '../../enum/db-error-messages.enum';
+import { canUserMutatePostService } from '../../service/authorization/can-user-mutate-post.service';
 import {
   MutationPostDeleteArgs,
   PostPayload,
@@ -29,6 +30,18 @@ export const DeletePostUseCase = async (
     };
   }
 
+  const validate = await canUserMutatePostService({
+    context: input.context,
+    postId: postToDelete.id,
+  });
+
+  if (!validate.access) {
+    return {
+      ...postPayload,
+      userErrors: validate.userErrors,
+    };
+  }
+
   try {
     await prisma.post.delete({ where: { id } });
   } catch (error) {
@@ -39,6 +52,6 @@ export const DeletePostUseCase = async (
   }
   return {
     ...postPayload,
-    ...postToDelete,
-  };
+    post: postToDelete,
+  } as unknown as PostPayload;
 };

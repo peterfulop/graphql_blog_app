@@ -1,5 +1,6 @@
 import { ApolloContext } from '../../apollo';
 import { DBErrorMessages } from '../../enum/db-error-messages.enum';
+import { canUserMutatePostService } from '../../service/authorization/can-user-mutate-post.service';
 import {
   MutationPostUpdateArgs,
   PostPayload,
@@ -22,7 +23,7 @@ export const UpdatePostUseCase = async (
     post: null,
   };
 
-  if (!title && !content) {
+  if (!title || !content) {
     return {
       ...postPayload,
       userErrors: [{ message: DBErrorMessages.ONE_FIELD_TO_UPDATE }],
@@ -30,10 +31,22 @@ export const UpdatePostUseCase = async (
   }
 
   const postToUpdate = await prisma.post.findUnique({ where: { id: postId } });
-  if (!postToUpdate) {
+  if (!postId || !postToUpdate) {
     return {
       ...postPayload,
       userErrors: [{ message: DBErrorMessages.MISSING_POST }],
+    };
+  }
+
+  const validate = await canUserMutatePostService({
+    context: input.context,
+    postId: postToUpdate.id,
+  });
+
+  if (!validate.access) {
+    return {
+      ...postPayload,
+      userErrors: validate.userErrors,
     };
   }
 
@@ -51,8 +64,8 @@ export const UpdatePostUseCase = async (
     });
     return {
       ...postPayload,
-      ...post,
-    };
+      post,
+    } as unknown as PostPayload;
   } catch (error) {
     return {
       userErrors: [{ message: DBErrorMessages.SERVER_ERROR }],

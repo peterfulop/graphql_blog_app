@@ -14,13 +14,33 @@ export const createPostUseCase = async (
   input: CreatePostInput
 ): Promise<PostPayload> => {
   const { title, content, published } = input.args.input;
-  const { userId } = input.context.user;
+  const userId = input.context.user?.userId;
   const { prisma } = input.context;
 
   const postPayload: PostPayload = {
     userErrors: [],
     post: null,
   };
+
+  if (!userId) {
+    return {
+      ...postPayload,
+      userErrors: [{ message: DBErrorMessages.UNAUTHENTICATED }],
+    };
+  }
+
+  const userExists = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!userExists) {
+    return {
+      ...postPayload,
+      userErrors: [{ message: DBErrorMessages.UNAUTHENTICATED }],
+    };
+  }
 
   if (!title || !content) {
     return {
@@ -34,14 +54,14 @@ export const createPostUseCase = async (
       data: {
         title,
         content,
-        userId,
+        userId: userId,
         published: published || false,
       },
     });
     return {
       ...postPayload,
-      ...post,
-    };
+      post,
+    } as unknown as PostPayload;
   } catch (error) {
     return {
       ...postPayload,

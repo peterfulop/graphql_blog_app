@@ -11,7 +11,7 @@ export type DeletePostInput = {
   context: ApolloContext;
 };
 
-export const DeletePostUseCase = async (
+export const deletePostUseCase = async (
   input: DeletePostInput
 ): Promise<PostPayload> => {
   const { id } = input.args;

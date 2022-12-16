@@ -20,5 +20,6 @@ const batchUsers: BatchUser = async (ids) => {
   });
   return ids.map((id) => userMap[id]);
 };
+
 // @ts-ignore
 export const userLoader = new DataLoader<string, User>(batchUsers);

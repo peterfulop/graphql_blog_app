@@ -7,7 +7,6 @@ export const userTypeDefs = `#graphql
     id: ID!
     name: String!
     email: String!
-    profile: Profile
     posts: [Post!]!
   }
 

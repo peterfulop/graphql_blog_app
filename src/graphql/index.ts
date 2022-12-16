@@ -33,9 +33,9 @@ export const typeDefs = [
   authTypeDefs,
 ];
 
-const { Query: postQueries, Mutations: postMutations } = postGQLResolvers;
-const { Query: profileQueries } = profileGQLResolver;
-const { Query: userQueries } = userGQLResolver;
+const { Query: postQueries, Mutations: postMutations, Post } = postGQLResolvers;
+const { Query: profileQueries, Profile } = profileGQLResolver;
+const { Query: userQueries, User } = userGQLResolver;
 const { Mutation: authMutations } = authGQLResolver;
 
 export const resolvers = {
@@ -48,4 +48,7 @@ export const resolvers = {
     ...postMutations,
     ...authMutations,
   },
+  Profile,
+  Post,
+  User,
 };

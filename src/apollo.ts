@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import { resolvers, typeDefs } from './graphql';
 import { JWTVerify } from './utils/jwt';
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 export interface ApolloContext {
   prisma: Prisma.PrismaClient<

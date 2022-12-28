@@ -106,6 +106,7 @@ export type Profile = {
   __typename?: 'Profile';
   bio: Scalars['String'];
   id: Scalars['ID'];
+  isMyProfile: Scalars['Boolean'];
   user: User;
   userId: Scalars['String'];
 };
@@ -305,6 +306,7 @@ export type PostPayloadResolvers<ContextType = any, ParentType extends Resolvers
 export type ProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {
   bio: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isMyProfile: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   user: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   userId: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

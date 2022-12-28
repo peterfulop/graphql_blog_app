@@ -8,5 +8,6 @@ export const profileTypeDefs = `#graphql
     bio: String!
     userId: String!
     user: User!
+    isMyProfile: Boolean!
   }
 `;

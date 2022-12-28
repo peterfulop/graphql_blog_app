@@ -21,7 +21,7 @@
     "uuid": "^9.0.0"
   },
   "scripts": {
-    "start:dev": "nodemon --watch './**/*.ts' --exec 'ts-node' src/index.ts",
+    "start:server": "nodemon --watch './**/*.ts' --exec 'ts-node' src/index.ts",
     "build": "rimraf dist && swc ./src -d dist",
     "start:backend": "ts-node src/index.ts dotenv_config_path=./.env",
     "codegen:gql": "graphql-codegen --require dotenv/config --config codegen.yml dotenv_config_path=.env"

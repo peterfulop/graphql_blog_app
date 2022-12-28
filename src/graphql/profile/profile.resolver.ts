@@ -14,7 +14,7 @@ export const profileGQLResolver = {
       _parent: any,
       args: QueryGetProfileArgs,
       context: ApolloContext
-    ): Promise<Profile> => {
+    ): Promise<Profile | null> => {
       return await getProfileUseCase({ args, context });
     },
   },

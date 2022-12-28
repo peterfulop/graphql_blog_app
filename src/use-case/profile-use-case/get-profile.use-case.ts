@@ -11,13 +11,22 @@ export type GetProfileInput = {
 
 export const getProfileUseCase = async (
   input: GetProfileInput
-): Promise<Profile> => {
+): Promise<Profile | null> => {
   const { userId } = input.args;
-  const { prisma } = input.context;
+  const { prisma, user } = input.context;
 
-  return (await prisma.profile.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: {
       userId,
     },
-  })) as unknown as Profile;
+  });
+
+  if (!profile) return null;
+
+  const isMyProfile = userId === user?.userId;
+
+  return {
+    ...profile,
+    isMyProfile,
+  } as unknown as Profile;
 };
